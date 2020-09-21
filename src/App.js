@@ -3,7 +3,12 @@ import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 import image1 from "./background_tshirt.png";
 import image2 from "./gallery1.png";
-
+import happy from "./images/smile.png";
+import grin from "./images/grinning.png";
+import happiness from "./images/happiness.png";
+import smiling from "./images/smiling.png";
+import smiling1 from "./images/smiling-1.png";
+import yummy from "./images/yummy.png";
 import { fabric } from "fabric";
 
 function App() {
@@ -117,7 +122,7 @@ function App() {
   const deleteItem = (e) => {
     console.log("myyyyyyy");
   };
-
+  //show canvas
   function display() {
     let pl = canvRef.current;
     console.log(getColor);
@@ -129,16 +134,59 @@ function App() {
     image.style.border = "1px solid red";
     document.querySelector(".App").appendChild(image);
   }
+
+  //show colorpicker
+  const handleColorPicker = (e) => {
+    console.log(e.target.value, "gggggggggg");
+    document.getElementById("favcolor").value = "#2d707c";
+  };
+
+  //handleImoji
+
+  const handleImoji = (happy) => {
+    setImage([...getImage, happy]);
+  };
   return (
     <div className="App">
+      <div
+        className="image"
+        style={{ border: "2px solid black", padding: "10px", width: "400px" }}
+      >
+        <img
+          src={happy}
+          onClick={() => handleImoji(happy)}
+          style={{ height: "50px", width: "50px" }}
+        />
+
+        <img
+          src={yummy}
+          onClick={() => handleImoji(yummy)}
+          style={{ height: "50px", width: "50px" }}
+        />
+
+        <img
+          src={happiness}
+          onClick={() => handleImoji(happiness)}
+          style={{ height: "50px", width: "50px" }}
+        />
+
+        <img
+          src={grin}
+          onClick={() => handleImoji(grin)}
+          style={{ height: "50px", width: "50px" }}
+        />
+        <img
+          src={happy}
+          onClick={() => handleImoji(happy)}
+          style={{ height: "50px", width: "50px" }}
+        />
+
+      </div>
+
       <div id="tshirt-div" style={{ margin: "10px" }}>
         <img id="tshirt-backgroundpicture" src={image1} />
 
-        <div
-          id="drawingArea"
-          className="drawing-area"
-          onKeyPress={(e) => deleteItem(e)}
-        >
+        <div id="drawingArea" className="drawing-area">
           <div className="canvas-container">
             <canvas
               ref={canvRef}
@@ -184,16 +232,6 @@ function App() {
           Display
         </button>
       </div>
-      {/* <div style={{ margin: "10px" }}>
-        <label>Select your Text color:</label>
-        <input
-          type="color"
-          id="favcolor"
-          name="favcolor"
-         
-        ></input>
-  
-      </div> */}
     </div>
   );
 }

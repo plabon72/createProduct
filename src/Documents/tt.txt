@@ -1,0 +1,128 @@
+Definition and concepts: An aspect of Biology which deals with the inter-relationship between the biotic and abiotic components as well as the relationship among the individuals of the biotic components is called ‘ECOLOGY’..
+
+
+
+The word "ecology" ("oekologie") (coined by German scientist Ernst Haeckel,1866) was derived from the Greek ―oikos”
+meaning "household" and logos meaning "science:" the "study of the household of nature." Ecology is not synonymous with environment, environmentalism, or environmental science.  Ecology is closely related to physiology, evolutionary biology, genetics and ethology. An understanding of how biodiversity affects ecologicalfunction is an important focus area in ecological studies.Ecology: branch of science that deals with interaction between living organisms with each other and their surroundings.Ecological systems are studied at several different levels from individuals and populations to ecosystems and biosphere level.  Ecology is a multi-disciplinary science, drawing on many other branches of science. Applied ecology is the practice of employing ecological principles and understanding to solve real world problems. E.g. calculating fish population, measuring environmental impact from construction or logging, building a case for the conservation of a species, and determining the most effective way to protect a species.
+
+
+
+The term ‘ECOLOGY” appears to have first been used in the middle of 19 th century. The term ‘ECOLOGY’ was first coined by H. Reiter (1885) followed by Ernst Haeckel (1886). The word ‘Ecology’ (original word ‘Ökologie) is derived from Greek words ‘Oikos’ meaning the ‘dwelling place or home’ and ‘logos’ meaning the ‘discourse or study’; thus, the word ‘Ecology’ literally means the study of living organism, including plants, animals and microorganisms in their natural habitats or homes.
+
+
+
+
+Earliest root: Aristotle, Lucretius & Frederick II –landmarks of many fields of knowledge, including Ecology 1798 – Thomas Malthus (English) – Essay on Population 1805 – Alexander von Humboldt (German) – Geography of plants – relationship bet. plants and physical env. 859- Charles Darwin (English) – On the origin of species 1866- Ernst Haeckel (German) – 1st used the term Ecology: Generelle Morphologies de Organismen  1887 - Stephen Forbes (American) – Ecosystem Concept – The Lake as a Microcosm F.A. Forel (Swiss) – Limnology of Lac Leman 7/21/2010 6
+
+1895 - Eugene Warming (American) – the first ecology book – Plantsamfund 1913 – Victor Shelford (American) – Animal Communities in Temperate America 1916 – Frederick Clements – 1st monograph on Plant Succession 1925 – Alfred Lotka – Elements of Physical Biology (nutrient cycling, energy flow). 1927 – Charles Eton (English) – Animal Ecology – (regulation
+of population size, ecological niche, community functions related to food chain.
+
+1929 – W.I. Wernadsky – Earth as an Ecological System – coined the term – Biosphere 1934 – G.F. Gause (Russian) – The Struggle for Existence: interspecific competition, predation. 1953 – Eugene Odum (American) – Fundamentals of Ecology
+1964-1974: International Biological Programme: Energy flowand nutrient cycling in various biomes
+
+
+
+
+Autecology – interactions bet. individual organism & its environment – focus physiological responses to the abiotic
+environ 
+Population ecology- interaction bet. pop. & its environm. A population is a group of individuals belonging to the same
+species and inhabiting a particular area. A species is a group of actually interbreeding individuals
+
+
+
+Ecology is a broad science which can be subdivided into major and minor sub- discipline. The major sub-disciplines include:
+
+Behavioral ecology, studies the ecological and evolutionary basis for animal behavior, and the roles of behavior in enabling animals to adapt to their ecological niches; Population ecology (or autecology), deals with the dynamics of populations within species, and the interactions of these populations with environmental factors; Community ecology (or synecology), studies the interactions between species within an ecological community;Landscape ecology, studies the interactions between discrete elements of a landscape; Ecosystem ecology, studies the flows of energy and matter through ecosystems; Global ecology, looks at ecological questions at the global level, often askingmacroecological questions. Ecology can also be sub-divided on the basis of target groups: Animal ecology, Plant ecology, Insect ecology;
+or from the perspective of the studied biomes
+
+
+
+Other specialized branches of ecology include:
+• Chemical ecology, deals with the ecological role of biological chemicals used in a wide range of areas
+including defense against predators and attraction of mates;
+• Systems ecology and biogeochemistry which focus on the flow of energy and nutrients within and among
+ecological units;
+• Ecophysiology, studies the relations between a single type of organism and the factors of its
+environment;
+• Ecotoxicology, looks at the ecological role of toxic chemicals (often pollutants, but also naturally
+occurring compounds);
+• Evolutionary ecology or Ecoevolution which looks at evolutionary changes in the context of the
+populations and communities in which the organisms exist;
+• Molecular ecology, attempts to address ecological questions at the molecular level, usually through by
+looking at DNA or allozymes;
+• Paleoecology: to understand the relationships between species in fossil assemblages, and in so doing gain
+insight into the way these species might have been shaped by their interactions with other species;
+• Ecology also plays important roles in many inter-disciplinary fields: ecological design and ecological
+engineering, ecological economics.
+• Human ecology and ecological anthropology social ecology, ecological health and environmental
+psychology.
+Finally, ecology has also inspired other non-biological disciplines such as industrial ecology, software
+ecology and information ecology.
+
+
+
+Objectives and scopes of Ecological studies: ‘Ecology’ has been developed as multidisciplinary science today. Presently mankind is greatly interested in ecology in view of the problems of environmental pollution, over population, human survival, pest control, overcoming natural digesters, restoration and conservation of natural resources. So, main objectives of
+Ecology and ecological researches focus on-
+1. Local and geographical distribution of organisms.
+2. Regional variation in the abundance of organisms
+3. Temporal changes in the occurrence, abundance and activities of organisms
+4. Interrelationships between organisms in populations and communities.
+5. Structural adaptations and functional adjustments of organisms to their physical
+environment.
+6. Behavior of organisms under natural conditions
+7. Evolutionary developments of all these interactions
+8. Evaluation on the causes and consequences of natural catastrophes
+9. Contribution in the restoration and conservation of natural resources
+10. Biological productivity of nature and its best uses.
+Scopes/applications of ecology-
+1. In understanding inter-relationships/interactions among plants, animals, microorganisms
+and environmental factors.
+2. In the exploration of natural resources and their best uses.
+3. In aforestation and reforestation practices.
+4. In restoration of wild lives and natural habitats.
+5. In the conservation of nature and natural resources.
+6. In controlling soil erosion, soil conservation and flood control.
+7. In modern agricultural and horticultural practices for increasing food productivity.
+8. In pollution control.
+9. Ecological knowledge is directly related to silvics and silviculture and other branches of
+forestry.
+10. Ecological knowledge/data/information has been used as the most essential tools in the
+development of sustainable and friendly environment/ecosystem.
+
+Divisions of Ecology- Though ECOLOGY is a multidisciplinary science, it is broadly divided into two divisions- i) Autecology and ii) Synecology Autecology- The part of ECOLOGY which is concerned with the study of individual plant,
+animal or microbial species or its population throughout its life history in relation to habitat in which it grows is called Autecology. In this part of Ecology inter-relationship between individual species or its population and its environment is studied. Example- Detail study on a single Jackfruit tree and Jackfruit garden or a single Tiger and all tigers. Autecology is also called as ‘Species Ecology’.
+
+Synecology- The division of ECOLOGY which deals with the study of a group of species or the whole communities or major fractions of communities or the total ecosystem is termed as Synecology. As it deals with the whole community, this part of Ecology is also called as Community Ecology as well. It is concerned with the structure, nature, development and causes of distribution of associated species in community. To understand the ecology and ecological relationship of plant communities, the ecological life-cycle or autecological study of important individual species of the communities must first be studied. Thus ‘Autecology’ forms/creates a basis of study of ‘Synecology’. Fields/Branches of Ecology- Different fields/branches which are made to account for thevarious specific and detail aspects of Ecology are as follows-
+ Habitat Ecology
+ Population Ecology
+ Community Ecology
+ Evolutionary Ecology
+ Taxonomic Ecology
+ Human Ecology
+ Paleoecology
+ Ecogeography
+ Cytoecology
+ Physiological Ecology
+ Chemical Ecology
+ Radiation Ecology
+ Ecosystem Ecology
+ Pollution Ecology
+ Resources and Resources Management Ecology
+ Wildlife Ecology
+ Gene-ecology
+ Restoration Ecology
+ Conservation Ecology
+ Production Ecology and ecological energetics
+ Landscape Ecology
+ Space Ecology
+ Applied Ecology
+
+
+
+1.Since all of us live in a natural or partly natural ecosystem, then considerable pleasure can be derived by studying the environment around us.
+2. Human economies are based on the exploitation and management of nature. Applied ecology is used every day in forestry, fisheries, range management, agriculture, and so on to provide us with the food and fiber we need.
+3. Human societies can often be understood very clearly from an ecological perspectives as we study, for example, the population dynamics (demography) of our own species, the food and fossil energy flowing through our society.
+4. Humans appear to be changing aspects of the global environment in many ways. Thus, ecology can be very useful to help us understand what these changes are, what the implications might be for various ecosystems, and how we might
+intervene in either human economies or in nature to try to mitigate or otherwise alter these changes. There are many professional ecologists, who believe that these apparent changes from human activities have the potential to generate enormous harm to both natural ecosystems and human economies. Understanding, predicting and adapting to these issues could be the most important of all possible issue for humans to deal with. In this case ecology and environmentalism canbe the same.
+
+
