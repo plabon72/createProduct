@@ -38,8 +38,7 @@ function App() {
     if (getImage.length > 0) {
       canvas = new fabric.Canvas("test");
       contextRef.current = canvas;
-      console.log(canvas,"ssssssssssssssssssss")
-   console.log(contextRef, "ssssssssssssssssssss");
+  
       canvas.setHeight(400);
       canvas.setWidth(200);
 
@@ -139,7 +138,13 @@ function App() {
       mtr: true,
     };
     for (let i = 0; i < getImage.length; i++) {
+      console.log("testttttttttttttttttt", getImage[i].imageSrc);
       fabric.Image.fromURL(getImage[i].imageSrc, function (img) {
+        console.log(
+          getImage[i].height,
+          getImage[i].width,
+          "fffuuuuuuuuuuuuuuuuuuu"
+        );
         img.scaleToHeight(getImage[i].height);
         img.scaleToWidth(getImage[i].width);
         img.setControlsVisibility(HideControls);
@@ -235,15 +240,41 @@ function App() {
     
 
     canvas.on("object:scaled", function (obj) {
-      console.log("resisezzzzzzzzed", obj.target);
-      let x = obj.target.scaleX;
-      let y = obj.target.scaleY;
-      let w = x * obj.target.width;
-      let h = y * obj.target.height;
-      console.log(h, w);
-      console.log(obj.target._element.baseURI);
+        let p=obj.target.scaleX;
+        let r=obj.target.scaleY
+      let w = p  * obj.target.width;
+      let h = r * obj.target.height;
+     
+     
+      let getImages = getImage;
+      setImage([]);
+      console.log(getImages.length,"shittttttttttttttt");
+      if(obj.target.hasOwnProperty('_element')){
+      
+        let actualsource=obj.target._element.currentSrc.slice(obj.target._element.baseURI.length)
+        let content=[];
+        for(let i=0;i<getImages.length;i++){
+          let str = getImages[i].imageSrc;
+         
+          if(str.indexOf(actualsource) !== -1){
+            getImages[i].height=h;
+            getImages[i].width=w;
+            
+            content.push(getImages[i]);
+          }
+          else{
+             content.push(getImages[i]);
+          }
+        }
+
+        console.log(content);
+        setImage([...content])
+        
+      }
+
+      
     });
-    
+
     canvas.on("object:moved", function () {
       let obj = canvas.getActiveObject();
       //    alert(obj.left + "," + obj.top);
@@ -254,6 +285,7 @@ function App() {
       canvasJson = JSON.parse(canvasJson);
 
       console.log(canvasJson);
+      let images=getImage;
       setImage([]);
       const textList = canvasJson.objects.filter(
         (item) => item.type === "text"
@@ -267,6 +299,7 @@ function App() {
           value: textList[i].text,
           top: textList[i].top,
           left: textList[i].left,
+
         };
         all.push(copyText);
       }
@@ -286,8 +319,8 @@ function App() {
           imageSrc: fileList[i].src,
           top: fileList[i].top,
           left: fileList[i].left,
-          height: 50,
-          width: 50,
+          height: images[i].height,
+          width: images[i].width,
         };
         allImage.push(copyFile);
       }
