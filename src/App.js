@@ -9,6 +9,7 @@ import happiness from "./images/happiness.png";
 import smiling from "./images/smiling.png";
 import smiling1 from "./images/smiling-1.png";
 import yummy from "./images/yummy.png";
+import delet from "./images/delete.png";
 import { fabric } from "fabric";
 import $ from "jquery";
 
@@ -38,11 +39,11 @@ function App() {
     if (getImage.length > 0) {
       canvas = new fabric.Canvas("test");
       contextRef.current = canvas;
-  
+
       canvas.setHeight(400);
       canvas.setWidth(200);
 
-     // setStatus(true);
+      // setStatus(true);
 
       drawImage(canvas);
 
@@ -68,7 +69,10 @@ function App() {
     reader.onload = async function (event) {
       var imgObj = await new Image();
       imgObj.src = await event.target.result;
-      setImage([...getImage, { imageSrc: imgObj.src, left: 80, top: 80,height:50,width:50}]);
+      setImage([
+        ...getImage,
+        { imageSrc: imgObj.src, left: 80, top: 80, height: 50, width: 50 },
+      ]);
     };
     let p = e.target.files[0];
 
@@ -125,6 +129,7 @@ function App() {
   };
 
   // draw image based on saved value
+  // hidecontrols remove the corner space for delete btn
   const drawImage = (canvas) => {
     var HideControls = {
       tl: true,
@@ -140,15 +145,11 @@ function App() {
     for (let i = 0; i < getImage.length; i++) {
       console.log("testttttttttttttttttt", getImage[i].imageSrc);
       fabric.Image.fromURL(getImage[i].imageSrc, function (img) {
-        console.log(
-          getImage[i].height,
-          getImage[i].width,
-          "fffuuuuuuuuuuuuuuuuuuu"
-        );
+       
         img.scaleToHeight(getImage[i].height);
         img.scaleToWidth(getImage[i].width);
         img.setControlsVisibility(HideControls);
-          methodsOf(img)
+        methodsOf(img);//setting event on  each images
         canvas.add(
           img.set({
             top: getImage[i].top,
@@ -180,25 +181,21 @@ function App() {
     document.querySelector(".App").appendChild(image);
   }
 
-
-
-  function methodsOf(circle){
-
+  //images method 
+  function methodsOf(circle) {
     circle.on("mousedown", function (e) {
-      console.log(e.target,"brotherrrrrrr");
-   addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
-
+      addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
     });
   }
 
-
+  //delete btn created and placed on objects
   function addDeleteBtn(x, y) {
-    console.log(x,y,"unexpecteddd")
+    console.log(x, y, "unexpecteddd");
     $(".deleteBtn").remove();
     var btnLeft = x - 10;
     var btnTop = y - 10;
     var deleteBtn =
-      `<img src=${smiling1} class="deleteBtn" style="position:absolute;top:` +
+      `<img src=${delet} class="deleteBtn" style="position:absolute;top:` +
       btnTop +
       "px;left:" +
       btnLeft +
@@ -207,8 +204,9 @@ function App() {
   }
 
 
+  //adding handler to delete btn
   $(document).on("click", ".deleteBtn", function () {
-  console.log(contextRef.current, "ssssssssssssssssssss oprs");
+    console.log(contextRef.current, "ssssssssssssssssssss oprs");
 
     // if (canvas.getActiveObject()) {
     //   canvas.remove(canvas.getActiveObject());
@@ -216,8 +214,9 @@ function App() {
     // }
   });
 
+  //here cnavas event is written
   function go(canvas) {
-    console.log(contextRef.current, "ssssssssssssssssssss oprs");
+  
     canvas.on("mouse:down", function (e) {
       if (!canvas.getActiveObject()) {
         $(".deleteBtn").remove();
@@ -237,55 +236,49 @@ function App() {
     canvas.on("object:rotating", function (e) {
       $(".deleteBtn").remove();
     });
-    
 
+    //setting the height and width of objects while resize and saved
     canvas.on("object:scaled", function (obj) {
-        let p=obj.target.scaleX;
-        let r=obj.target.scaleY
-      let w = p  * obj.target.width;
+      let p = obj.target.scaleX;
+      let r = obj.target.scaleY;
+      let w = p * obj.target.width;
       let h = r * obj.target.height;
-     
-     
+
       let getImages = getImage;
       setImage([]);
-      console.log(getImages.length,"shittttttttttttttt");
-      if(obj.target.hasOwnProperty('_element')){
-      
-        let actualsource=obj.target._element.currentSrc.slice(obj.target._element.baseURI.length)
-        let content=[];
-        for(let i=0;i<getImages.length;i++){
+      console.log(getImages.length, "shittttttttttttttt");
+      if (obj.target.hasOwnProperty("_element")) {
+        let actualsource = obj.target._element.currentSrc.slice(
+          obj.target._element.baseURI.length
+        );
+        let content = [];
+        for (let i = 0; i < getImages.length; i++) {
           let str = getImages[i].imageSrc;
-         
-          if(str.indexOf(actualsource) !== -1){
-            getImages[i].height=h;
-            getImages[i].width=w;
-            
+
+          if (str.indexOf(actualsource) !== -1) {
+            getImages[i].height = h;
+            getImages[i].width = w;
+
             content.push(getImages[i]);
-          }
-          else{
-             content.push(getImages[i]);
+          } else {
+            content.push(getImages[i]);
           }
         }
 
         console.log(content);
-        setImage([...content])
-        
+        setImage([...content]);
       }
-
-      
     });
 
+
+    //while moving object in canvas redering all
     canvas.on("object:moved", function () {
       let obj = canvas.getActiveObject();
-      //    alert(obj.left + "," + obj.top);
-
-      //   console.log("Event mouse:up Triggered",obj);
-
       let canvasJson = JSON.stringify(canvas);
       canvasJson = JSON.parse(canvasJson);
 
       console.log(canvasJson);
-      let images=getImage;
+      let images = getImage;
       setImage([]);
       const textList = canvasJson.objects.filter(
         (item) => item.type === "text"
@@ -299,7 +292,6 @@ function App() {
           value: textList[i].text,
           top: textList[i].top,
           left: textList[i].left,
-
         };
         all.push(copyText);
       }
@@ -327,7 +319,6 @@ function App() {
       console.log(allImage.length);
       setImage([...allImage]);
     });
-
   }
 
   return (
@@ -415,8 +406,6 @@ function App() {
           Display
         </button>
       </div>
-
-      
     </div>
   );
 }
