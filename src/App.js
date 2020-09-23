@@ -10,17 +10,21 @@ import smiling from "./images/smiling.png";
 import smiling1 from "./images/smiling-1.png";
 import yummy from "./images/yummy.png";
 import { fabric } from "fabric";
+import $ from "jquery";
 
 function App() {
   let canvRef = useRef(null);
+  let contextRef = useRef(null);
   let [getImage, setImage] = useState([]);
   let [getText, setText] = useState([]);
   let [getColor, setColor] = useState("#fff");
+
+  let [status, setStatus] = useState(true);
   var canvas;
   //clear canvas each time new object added
   const clearCanvas = () => {
     let pp = document.getElementsByTagName("canvas");
-    console.log("pp", pp.length);
+    console.log("remove-canvas", pp.length);
     for (let i = 1; i < pp.length; i++) {
       console.log(pp[i], "", i);
       pp[i].remove();
@@ -33,19 +37,31 @@ function App() {
 
     if (getImage.length > 0) {
       canvas = new fabric.Canvas("test");
+      contextRef.current = canvas;
+      console.log(canvas,"ssssssssssssssssssss")
+   console.log(contextRef, "ssssssssssssssssssss");
       canvas.setHeight(400);
       canvas.setWidth(200);
+
+     // setStatus(true);
 
       drawImage(canvas);
 
       if (getText.length > 0) {
         for (let i = 0; i < getText.length; i++) {
-          canvas.add(new fabric.Text(getText[i]));
+          canvas.add(
+            new fabric.Text(getText[i].value, {
+              left: getText[i].left,
+              top: getText[i].top,
+            })
+          );
         }
       }
+
+      go(canvas);
       canvas.renderAll();
     }
-  }, [getImage]);
+  }, [getImage.length]);
 
   //uploading image saved in state
   function imageUpload(e) {
@@ -53,51 +69,87 @@ function App() {
     reader.onload = async function (event) {
       var imgObj = await new Image();
       imgObj.src = await event.target.result;
-      setImage([...getImage, imgObj.src]);
+      setImage([...getImage, { imageSrc: imgObj.src, left: 80, top: 80,height:50,width:50}]);
     };
     let p = e.target.files[0];
 
     reader.readAsDataURL(p);
   }
 
+  //handleImoji saved in state
+
+  const handleImoji = (happy) => {
+    setImage([
+      ...getImage,
+      { imageSrc: happy, left: 80, top: 80, height: 50, width: 50 },
+    ]);
+  };
+
   //onchange if text this section works
   useEffect(() => {
     clearCanvas();
-
+    console.log("bhaiiii");
     if (getText.length > 0) {
       canvas = new fabric.Canvas(canvRef.current);
       canvas.setHeight(400);
       canvas.setWidth(200);
+
+      console.log(getText.length, "you areeeeeeeeeeeeeee");
       let setNewColor = "black";
       if (getColor === "#000") {
         setNewColor = "#f00";
       }
       for (let i = 0; i < getText.length; i++) {
+        console.log(getText[i]);
         canvas.add(
-          new fabric.Text(getText[i], {
-            left: 50,
-            top: 50,
+          new fabric.Text(getText[i].value, {
+            left: getText[i].left,
+            top: getText[i].top,
             fill: setNewColor,
           })
         );
       }
-
+      go(canvas);
       if (getImage.length > 0) {
         drawImage(canvas);
       }
     }
-  }, [getText]);
+  }, [getText.length]);
+
+  //text is saved for state
+  const handleText = () => {
+    let value = document.getElementById("text").value;
+    document.getElementById("text").value = "";
+    console.log(value, "PPPPPPPPPPPP");
+
+    setText([...getText, { value, left: 50, top: 50 }]);
+  };
 
   // draw image based on saved value
   const drawImage = (canvas) => {
+    var HideControls = {
+      tl: true,
+      tr: false,
+      bl: true,
+      br: true,
+      ml: true,
+      mt: true,
+      mr: true,
+      mb: true,
+      mtr: true,
+    };
     for (let i = 0; i < getImage.length; i++) {
-      fabric.Image.fromURL(getImage[i], function (img) {
-        img.scaleToHeight(100);
-        img.scaleToWidth(100);
-        if (getImage.length > 0) {
-          canvas.centerObject(img);
-        }
-        canvas.add(img);
+      fabric.Image.fromURL(getImage[i].imageSrc, function (img) {
+        img.scaleToHeight(getImage[i].height);
+        img.scaleToWidth(getImage[i].width);
+        img.setControlsVisibility(HideControls);
+          methodsOf(img)
+        canvas.add(
+          img.set({
+            top: getImage[i].top,
+            left: getImage[i].left,
+          })
+        );
       });
     }
     canvas.renderAll();
@@ -110,18 +162,6 @@ function App() {
     setColor(e.target.value);
   }
 
-  //text is saved for state
-  const handleText = () => {
-    let value = document.getElementById("text").value;
-    document.getElementById("text").value = "";
-    console.log(value, "PPPPPPPPPPPP");
-
-    setText([...getText, value]);
-  };
-
-  const deleteItem = (e) => {
-    console.log("myyyyyyy");
-  };
   //show canvas
   function display() {
     let pl = canvRef.current;
@@ -135,17 +175,118 @@ function App() {
     document.querySelector(".App").appendChild(image);
   }
 
-  //show colorpicker
-  const handleColorPicker = (e) => {
-    console.log(e.target.value, "gggggggggg");
-    document.getElementById("favcolor").value = "#2d707c";
-  };
 
-  //handleImoji
 
-  const handleImoji = (happy) => {
-    setImage([...getImage, happy]);
-  };
+  function methodsOf(circle){
+
+    circle.on("mousedown", function (e) {
+      console.log(e.target,"brotherrrrrrr");
+   addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
+
+    });
+  }
+
+
+  function addDeleteBtn(x, y) {
+    console.log(x,y,"unexpecteddd")
+    $(".deleteBtn").remove();
+    var btnLeft = x - 10;
+    var btnTop = y - 10;
+    var deleteBtn =
+      `<img src=${smiling1} class="deleteBtn" style="position:absolute;top:` +
+      btnTop +
+      "px;left:" +
+      btnLeft +
+      'px;cursor:pointer;width:20px;height:20px;"/>';
+    $(".canvas-container").append(deleteBtn);
+  }
+
+
+  $(document).on("click", ".deleteBtn", function () {
+  console.log(contextRef.current, "ssssssssssssssssssss oprs");
+
+    // if (canvas.getActiveObject()) {
+    //   canvas.remove(canvas.getActiveObject());
+    //   $(".deleteBtn").remove();
+    // }
+  });
+
+  function go(canvas) {
+    console.log(contextRef.current, "ssssssssssssssssssss oprs");
+    canvas.on("mouse:down", function (e) {
+      if (!canvas.getActiveObject()) {
+        $(".deleteBtn").remove();
+      }
+    });
+
+    canvas.on("object:modified", function (e) {
+      addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
+    });
+
+    canvas.on("object:scaling", function (e) {
+      $(".deleteBtn").remove();
+    });
+    canvas.on("object:moving", function (e) {
+      $(".deleteBtn").remove();
+    });
+    canvas.on("object:rotating", function (e) {
+      $(".deleteBtn").remove();
+    });
+    
+
+    canvas.on("object:moved", function () {
+      let obj = canvas.getActiveObject();
+      //    alert(obj.left + "," + obj.top);
+
+      //   console.log("Event mouse:up Triggered",obj);
+
+      let canvasJson = JSON.stringify(canvas);
+      canvasJson = JSON.parse(canvasJson);
+
+      console.log(canvasJson);
+      setImage([]);
+      const textList = canvasJson.objects.filter(
+        (item) => item.type === "text"
+      );
+      console.log(textList.length, "texttttttt");
+
+      let copyText = {};
+      let all = [];
+      for (let i = 0; i < textList.length; i++) {
+        copyText = {
+          value: textList[i].text,
+          top: textList[i].top,
+          left: textList[i].left,
+        };
+        all.push(copyText);
+      }
+      console.log(all.length);
+      setText([...all]);
+
+      const fileList = canvasJson.objects.filter(
+        (item) => item.type === "image"
+      );
+
+      console.log(fileList.length, "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiimage");
+
+      let copyFile = {};
+      let allImage = [];
+      for (let i = 0; i < fileList.length; i++) {
+        copyFile = {
+          imageSrc: fileList[i].src,
+          top: fileList[i].top,
+          left: fileList[i].left,
+          height: 50,
+          width: 50,
+        };
+        allImage.push(copyFile);
+      }
+      console.log(allImage.length);
+      setImage([...allImage]);
+    });
+
+  }
+
   return (
     <div className="App">
       <div
@@ -180,7 +321,6 @@ function App() {
           onClick={() => handleImoji(happy)}
           style={{ height: "50px", width: "50px" }}
         />
-
       </div>
 
       <div id="tshirt-div" style={{ margin: "10px" }}>
@@ -232,6 +372,8 @@ function App() {
           Display
         </button>
       </div>
+
+      
     </div>
   );
 }
