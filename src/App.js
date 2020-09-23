@@ -234,6 +234,16 @@ function App() {
     });
     
 
+    canvas.on("object:scaled", function (obj) {
+      console.log("resisezzzzzzzzed", obj.target);
+      let x = obj.target.scaleX;
+      let y = obj.target.scaleY;
+      let w = x * obj.target.width;
+      let h = y * obj.target.height;
+      console.log(h, w);
+      console.log(obj.target._element.baseURI);
+    });
+    
     canvas.on("object:moved", function () {
       let obj = canvas.getActiveObject();
       //    alert(obj.left + "," + obj.top);
