@@ -20,7 +20,7 @@ function App() {
   let [delImage, setDelImage] = useState([]);
   let [getText, setText] = useState([]);
   let [getColor, setColor] = useState("#fff");
-  var data=[];
+
   let [status, setStatus] = useState(true);
   var canvas;
   //clear canvas each time new object added
@@ -52,6 +52,7 @@ function App() {
             new fabric.Text(getText[i].value, {
               left: getText[i].left,
               top: getText[i].top,
+              id: getText[i].id,
             })
           );
         }
@@ -66,9 +67,12 @@ function App() {
 
 
 
-  function takingSateValue(data){
-  const allvalue=  getImage.filter(item=>item.id !=data)
-  setImage([...allvalue])
+  function takingSateValue(data, getImages) {
+    console.log(getImages);
+    console.log(data);
+    const allvalue = getImages.filter((item) => item.id != data);
+    console.log(allvalue);
+    setImage([...allvalue]);
   }
 
   //uploading image saved in state
@@ -133,6 +137,7 @@ function App() {
             left: getText[i].left,
             top: getText[i].top,
             fill: setNewColor,
+            id: getText[i].id,
           })
         );
       }
@@ -148,8 +153,9 @@ function App() {
     let value = document.getElementById("text").value;
     document.getElementById("text").value = "";
     console.log(value, "PPPPPPPPPPPP");
-
-    setText([...getText, { value, left: 50, top: 50 }]);
+       let id = Date.now();
+       let src = "text_" + id;
+    setText([...getText, { value, left: 50, top: 50, id: src }]);
   };
 
   // draw image based on saved value
@@ -233,11 +239,14 @@ function App() {
     //adding handler to delete btn
     $(document).on("click", ".plabon", async function () {
       if (canvas.getActiveObject()) {
+        let gg=getImage;
+       
         let seletedObj = canvas.getActiveObject();
-        console.log(seletedObj.id,"selectedobj Id")
-        takingSateValue(seletedObj.id)
-       // data.push({id:seletedObj.id})
-       // setdelImage([...data]);
+        console.log(seletedObj,"selectedobj Id")
+
+         setImage([]);
+        takingSateValue(seletedObj.id, gg);
+        
         canvas.remove(canvas.getActiveObject());
 
         $(".plabon").remove();
@@ -309,6 +318,7 @@ function App() {
       console.log(JSON.parse(canvasJson));
       canvasJson = JSON.parse(canvasJson);
       let images = getImage;
+      let texts=getText;
       setImage([]);
 
       const textList = canvasJson.objects.filter(
@@ -323,6 +333,7 @@ function App() {
           value: textList[i].text,
           top: textList[i].top,
           left: textList[i].left,
+          id: texts[i].id,
         };
         all.push(copyText);
       }
