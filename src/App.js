@@ -62,17 +62,33 @@ function App() {
       canvas.renderAll();
     }
   }, [getImage.length]);
- 
-
-
-
 
   function takingSateValue(data, getImages) {
+    console.log(getImages, "brooooooooooooooo");
+
+    let st = getImages.length;
+    console.log(st.length, "ttttttttttrrrrrrrrrrrrr");
+
     console.log(getImages);
     console.log(data);
     const allvalue = getImages.filter((item) => item.id != data);
     console.log(allvalue);
+    
+   clearCanvas();
     setImage([...allvalue]);
+  }
+
+  function takingSateValueFor(data, texts) {
+    
+     const allvalue = texts.filter((item) => item.id != data);
+   clearCanvas();
+    setText([...allvalue]);
+    // console.log(getImages);
+    // console.log(data);
+    // const allvalue = getImages.filter((item) => item.id != data);
+    // console.log(allvalue);
+    // clearCanvas();
+    // setImage([...allvalue]);
   }
 
   //uploading image saved in state
@@ -81,8 +97,7 @@ function App() {
     reader.onload = async function (event) {
       var imgObj = await new Image();
       imgObj.src = await event.target.result;
-      // await delImages();
-      //console.log("babuuuuuuuuu",all.length)
+    
       let id = Date.now();
       let src = "image_" + id;
       setImage([
@@ -153,8 +168,8 @@ function App() {
     let value = document.getElementById("text").value;
     document.getElementById("text").value = "";
     console.log(value, "PPPPPPPPPPPP");
-       let id = Date.now();
-       let src = "text_" + id;
+    let id = Date.now();
+    let src = "text_" + id;
     setText([...getText, { value, left: 50, top: 50, id: src }]);
   };
 
@@ -178,7 +193,7 @@ function App() {
         img.scaleToHeight(getImage[i].height);
         img.scaleToWidth(getImage[i].width);
         img.setControlsVisibility(HideControls);
-        methodsOf(img); //setting event on  each images
+       // methodsOf(img); //setting event on  each images
         canvas.add(
           img.set({
             top: getImage[i].top,
@@ -213,18 +228,19 @@ function App() {
   //delete image
 
   //images method
-  function methodsOf(circle) {
-    circle.on("mousedown", function (e) {
-      addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
-    });
-  }
+  // function methodsOf(circle) {
+    
+  //   circle.on("mousedown", function (e) {
+  //     addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
+  //   });
+  // }
 
   //delete btn created and placed on objects
   function addDeleteBtn(x, y) {
     console.log(x, y, "unexpecteddd");
     $(".plabon").remove();
     var btnLeft = x - 10;
-    var btnTop = y - 9;
+    var btnTop = y - 10;
     var deleteBtn =
       `<img src=${delet} class="plabon" style="position:absolute;top:` +
       btnTop +
@@ -239,19 +255,29 @@ function App() {
     //adding handler to delete btn
     $(document).on("click", ".plabon", async function () {
       if (canvas.getActiveObject()) {
-        let gg=getImage;
-       
+        let gg = getImage;
+        let tt = getText;
         let seletedObj = canvas.getActiveObject();
-        console.log(seletedObj,"selectedobj Id")
+        if (seletedObj.hasOwnProperty("text")) {
+        //      setText([]);
+        //   takingSateValueFor(seletedObj.id, tt);
+        } else {
+          console.log(seletedObj, "selectedobj Id");
 
-         setImage([]);
-        takingSateValue(seletedObj.id, gg);
-        
+          setImage([]);
+          
+
+          takingSateValue(seletedObj.id, gg);
+        }
+
         canvas.remove(canvas.getActiveObject());
 
         $(".plabon").remove();
       }
     });
+
+
+
     canvas.on("mouse:down", function (e) {
       if (!canvas.getActiveObject()) {
         $(".plabon").remove();
@@ -318,7 +344,7 @@ function App() {
       console.log(JSON.parse(canvasJson));
       canvasJson = JSON.parse(canvasJson);
       let images = getImage;
-      let texts=getText;
+      let texts = getText;
       setImage([]);
 
       const textList = canvasJson.objects.filter(
