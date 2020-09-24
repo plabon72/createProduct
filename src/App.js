@@ -18,10 +18,10 @@ function App() {
   let contextRef = useRef(null);
   let [getImage, setImage] = useState([]);
 
-  let [getText, setText] = useState([]);
+
   let [getColor, setColor] = useState("#fff");
 
-  let [status, setStatus] = useState(true);
+  
   var canvas;
   //clear canvas each time new object added
   const clearCanvas = () => {
@@ -217,7 +217,7 @@ function App() {
       if (canvas.getActiveObject()) {
         let gg = getImage;
         let seletedObj = canvas.getActiveObject();
-        takingSateValue(seletedObj.id,gg);
+        takingSateValue(seletedObj.id, gg);
         canvas.remove(canvas.getActiveObject());
 
         $(".plabon").remove();
@@ -230,8 +230,11 @@ function App() {
       }
     });
 
-    canvas.on("object:modified", function (e) {
+    canvas.on("mouse:dblclick", function (e) {
+        if (canvas.getActiveObject()) {
       addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
+          
+        }
     });
 
     canvas.on("object:scaling", function (e) {
@@ -256,9 +259,7 @@ function App() {
       let getImages = getImage;
       setImage([]);
       if (obj.target.hasOwnProperty("_element")) {
-        // let actualsource = obj.target._element.currentSrc.slice(
-        //   obj.target._element.baseURI.length
-        // );
+       
         let content = [];
         for (let i = 0; i < getImages.length; i++) {
           let str = getImages[i].id;
@@ -282,63 +283,55 @@ function App() {
 
     //while moving object in canvas redering all
     canvas.on("object:moved", function (obj) {
-
       console.log(obj.target.id);
       let id = obj.target.id;
-       let field=obj.target.fieldType;
-        let getImages = getImage;
-        // setImage([]);
-        //  let content = [];
-        //  for (let i = 0; i < getImages.length; i++) {
-        //    let str = getImages[i].id;
+      let field = obj.target.fieldType;
+      let getImages = getImage;
 
-        //    if (str.indexOf(id) !== -1 && field==="image") {
-        //      getImages[i].height = h;
-        //      getImages[i].width = w;
-        //      getImages[i].id = getImages[i].id;
-        //      getImages[i].fieldType = "image";
+      let cuId = obj.target.id;
 
-        //      content.push(getImages[i]);
-        //    } else {
-        //      content.push(getImages[i]);
-        //    }
-        //  }
+      let content = [];
+      let copyFile = {};
 
-        //  console.log(content);
-        //  setImage([...content]);
-        
-      // let canvasJson = JSON.stringify(
-      //   canvas.toDatalessJSON(["id", "fieldType"])
-      // );
-      // // console.log(JSON.parse(canvasJson));
-      // canvasJson = JSON.parse(canvasJson);
-      // let images = getImage;
+      for (let i = 0; i < getImages.length; i++) {
+        let str = getImages[i].id;
 
-      // setImage([]);
+        if (str.indexOf(cuId) !== -1) {
+       
+          if (field === "image") {
+            copyFile = {
+              imageSrc: getImages[i].imageSrc,
+              top: obj.target.top,
+              left: obj.target.left,
+              height: getImages[i].height,
+              width: getImages[i].width,
+              id: getImages[i].id,
+              fieldType: "image",
+            };
+          } else {
+            copyFile = {
+              fieldType: "text",
+              value: getImages[i].value,
+              top: obj.target.top,
+              left: obj.target.left,
+              id: getImages[i].id,
+            };
+          }
 
-      // // console.log(fileList.length, "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiimage");
-      // let fileList = canvasJson.objects;
-      // let copyFile = {};
-      // let allImage = [];
-      // for (let i = 0; i < fileList.length; i++) {
-      //   if (canvasJson.objects.fieldType === "image") {
-      //     copyFile = {
-      //       imageSrc: fileList[i].src,
-      //       top: fileList[i].top,
-      //       left: fileList[i].left,
-      //       height: images[i].height,
-      //       width: images[i].width,
-      //       id: images[i].id,
-      //       fieldType: "image",
-      //     };
-      //     allImage.push(copyFile);
-      //   } else {
-      //     allImage.push(fileList[i]);
-      //   }
-      // }
-      // console.log(allImage.length, "onmoveddddddddd");
-      // setImage([...allImage]);
+          content.push(copyFile);
+        } else {
+          content.push(getImages[i]);
+        }
+      }
+
+      console.log(content);
+      setImage([...content]);
+
     });
+
+
+
+
   }
 
   return (
