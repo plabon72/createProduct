@@ -17,7 +17,7 @@ function App() {
   let canvRef = useRef(null);
   let contextRef = useRef(null);
   let [getImage, setImage] = useState([]);
-  let [delImage, setDelImage] = useState([]);
+
   let [getText, setText] = useState([]);
   let [getColor, setColor] = useState("#fff");
 
@@ -44,15 +44,16 @@ function App() {
 
       // setStatus(true);
 
-      drawImage(canvas);
-
-      if (getText.length > 0) {
-        for (let i = 0; i < getText.length; i++) {
+      const fileList = getImage.filter((item) => item.fieldType == "image");
+      drawImage(canvas, fileList);
+      const textList = getImage.filter((item) => item.fieldType == "text");
+      if (textList.length > 0) {
+        for (let i = 0; i < textList.length; i++) {
           canvas.add(
-            new fabric.Text(getText[i].value, {
-              left: getText[i].left,
-              top: getText[i].top,
-              id: getText[i].id,
+            new fabric.Text(textList[i].value, {
+              left: textList[i].left,
+              top: textList[i].top,
+              id: textList[i].id,
             })
           );
         }
@@ -73,22 +74,9 @@ function App() {
     console.log(data);
     const allvalue = getImages.filter((item) => item.id != data);
     console.log(allvalue);
-    
-   clearCanvas();
-    setImage([...allvalue]);
-  }
 
-  function takingSateValueFor(data, texts) {
-    
-     const allvalue = texts.filter((item) => item.id != data);
-   clearCanvas();
-    setText([...allvalue]);
-    // console.log(getImages);
-    // console.log(data);
-    // const allvalue = getImages.filter((item) => item.id != data);
-    // console.log(allvalue);
-    // clearCanvas();
-    // setImage([...allvalue]);
+    clearCanvas();
+    setImage([...allvalue]);
   }
 
   //uploading image saved in state
@@ -97,7 +85,7 @@ function App() {
     reader.onload = async function (event) {
       var imgObj = await new Image();
       imgObj.src = await event.target.result;
-    
+
       let id = Date.now();
       let src = "image_" + id;
       setImage([
@@ -109,6 +97,7 @@ function App() {
           height: 50,
           width: 50,
           id: src,
+          fieldType: "image",
         },
       ]);
     };
@@ -125,43 +114,19 @@ function App() {
 
     //  let all=  await delImages();
     //  console.log("babuuuuuuuuu");
-    await setImage([
+    setImage([
       ...getImage,
-      { imageSrc: happy, left: 80, top: 80, height: 50, width: 50, id: src },
+      {
+        imageSrc: happy,
+        left: 80,
+        top: 80,
+        height: 50,
+        width: 50,
+        id: src,
+        fieldType: "image",
+      },
     ]);
   };
-
-  //onchange if text this section works
-  useEffect(() => {
-    clearCanvas();
-    console.log("bhaiiii");
-    if (getText.length > 0) {
-      canvas = new fabric.Canvas(canvRef.current);
-      canvas.setHeight(400);
-      canvas.setWidth(200);
-
-      console.log(getText.length, "you areeeeeeeeeeeeeee");
-      let setNewColor = "black";
-      if (getColor === "#000") {
-        setNewColor = "#f00";
-      }
-      for (let i = 0; i < getText.length; i++) {
-        console.log(getText[i]);
-        canvas.add(
-          new fabric.Text(getText[i].value, {
-            left: getText[i].left,
-            top: getText[i].top,
-            fill: setNewColor,
-            id: getText[i].id,
-          })
-        );
-      }
-      go(canvas);
-      if (getImage.length > 0) {
-        drawImage(canvas);
-      }
-    }
-  }, [getText.length]);
 
   //text is saved for state
   const handleText = () => {
@@ -170,12 +135,15 @@ function App() {
     console.log(value, "PPPPPPPPPPPP");
     let id = Date.now();
     let src = "text_" + id;
-    setText([...getText, { value, left: 50, top: 50, id: src }]);
+    setImage([
+      ...getImage,
+      { value, left: 50, top: 50, id: src, fieldType: "text" },
+    ]);
   };
 
   // draw image based on saved value
   // hidecontrols remove the corner space for delete btn
-  const drawImage = (canvas) => {
+  const drawImage = (canvas, fileList) => {
     var HideControls = {
       tl: true,
       tr: false,
@@ -187,18 +155,19 @@ function App() {
       mb: true,
       mtr: true,
     };
-    for (let i = 0; i < getImage.length; i++) {
+    for (let i = 0; i < fileList.length; i++) {
       //console.log("testttttttttttttttttt", getImage[i].imageSrc);
-      fabric.Image.fromURL(getImage[i].imageSrc, function (img) {
-        img.scaleToHeight(getImage[i].height);
-        img.scaleToWidth(getImage[i].width);
+      fabric.Image.fromURL(fileList[i].imageSrc, function (img) {
+        img.scaleToHeight(fileList[i].height);
+        img.scaleToWidth(fileList[i].width);
         img.setControlsVisibility(HideControls);
-       // methodsOf(img); //setting event on  each images
+        // methodsOf(img); //setting event on  each images
         canvas.add(
           img.set({
-            top: getImage[i].top,
-            left: getImage[i].left,
-            id: getImage[i].id,
+            top: fileList[i].top,
+            left: fileList[i].left,
+            id: fileList[i].id,
+            fieldType: fileList[i].fieldType,
           })
         );
       });
@@ -225,15 +194,6 @@ function App() {
     image.style.border = "1px solid red";
     document.querySelector(".App").appendChild(image);
   }
-  //delete image
-
-  //images method
-  // function methodsOf(circle) {
-    
-  //   circle.on("mousedown", function (e) {
-  //     addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
-  //   });
-  // }
 
   //delete btn created and placed on objects
   function addDeleteBtn(x, y) {
@@ -256,27 +216,13 @@ function App() {
     $(document).on("click", ".plabon", async function () {
       if (canvas.getActiveObject()) {
         let gg = getImage;
-        let tt = getText;
         let seletedObj = canvas.getActiveObject();
-        if (seletedObj.hasOwnProperty("text")) {
-        //      setText([]);
-        //   takingSateValueFor(seletedObj.id, tt);
-        } else {
-          console.log(seletedObj, "selectedobj Id");
-
-          setImage([]);
-          
-
-          takingSateValue(seletedObj.id, gg);
-        }
-
+        takingSateValue(seletedObj.id,gg);
         canvas.remove(canvas.getActiveObject());
 
         $(".plabon").remove();
       }
     });
-
-
 
     canvas.on("mouse:down", function (e) {
       if (!canvas.getActiveObject()) {
@@ -321,6 +267,8 @@ function App() {
             getImages[i].height = h;
             getImages[i].width = w;
             getImages[i].id = getImages[i].id;
+            getImages[i].fieldType = "image";
+
             content.push(getImages[i]);
           } else {
             content.push(getImages[i]);
@@ -333,60 +281,63 @@ function App() {
     });
 
     //while moving object in canvas redering all
-    canvas.on("object:moved", function () {
-      // let obj = canvas.getActiveObject();
-      // let canvasJson = JSON.stringify(canvas);
+    canvas.on("object:moved", function (obj) {
+
+      console.log(obj.target.id);
+      let id = obj.target.id;
+       let field=obj.target.fieldType;
+        let getImages = getImage;
+        // setImage([]);
+        //  let content = [];
+        //  for (let i = 0; i < getImages.length; i++) {
+        //    let str = getImages[i].id;
+
+        //    if (str.indexOf(id) !== -1 && field==="image") {
+        //      getImages[i].height = h;
+        //      getImages[i].width = w;
+        //      getImages[i].id = getImages[i].id;
+        //      getImages[i].fieldType = "image";
+
+        //      content.push(getImages[i]);
+        //    } else {
+        //      content.push(getImages[i]);
+        //    }
+        //  }
+
+        //  console.log(content);
+        //  setImage([...content]);
+        
+      // let canvasJson = JSON.stringify(
+      //   canvas.toDatalessJSON(["id", "fieldType"])
+      // );
+      // // console.log(JSON.parse(canvasJson));
       // canvasJson = JSON.parse(canvasJson);
+      // let images = getImage;
 
-      //  console.log(canvasJson, "bbbbbbbbbbbbbbbbbbbbb");
+      // setImage([]);
 
-      let canvasJson = JSON.stringify(canvas.toDatalessJSON(["id"]));
-      console.log(JSON.parse(canvasJson));
-      canvasJson = JSON.parse(canvasJson);
-      let images = getImage;
-      let texts = getText;
-      setImage([]);
-
-      const textList = canvasJson.objects.filter(
-        (item) => item.type === "text"
-      );
-      console.log(textList.length, "texttttttt");
-
-      let copyText = {};
-      let all = [];
-      for (let i = 0; i < textList.length; i++) {
-        copyText = {
-          value: textList[i].text,
-          top: textList[i].top,
-          left: textList[i].left,
-          id: texts[i].id,
-        };
-        all.push(copyText);
-      }
-      console.log(all.length);
-      setText([...all]);
-
-      const fileList = canvasJson.objects.filter(
-        (item) => item.type === "image"
-      );
-
-      console.log(fileList.length, "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiimage");
-
-      let copyFile = {};
-      let allImage = [];
-      for (let i = 0; i < fileList.length; i++) {
-        copyFile = {
-          imageSrc: fileList[i].src,
-          top: fileList[i].top,
-          left: fileList[i].left,
-          height: images[i].height,
-          width: images[i].width,
-          id: images[i].id,
-        };
-        allImage.push(copyFile);
-      }
-      console.log(allImage.length);
-      setImage([...allImage]);
+      // // console.log(fileList.length, "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiimage");
+      // let fileList = canvasJson.objects;
+      // let copyFile = {};
+      // let allImage = [];
+      // for (let i = 0; i < fileList.length; i++) {
+      //   if (canvasJson.objects.fieldType === "image") {
+      //     copyFile = {
+      //       imageSrc: fileList[i].src,
+      //       top: fileList[i].top,
+      //       left: fileList[i].left,
+      //       height: images[i].height,
+      //       width: images[i].width,
+      //       id: images[i].id,
+      //       fieldType: "image",
+      //     };
+      //     allImage.push(copyFile);
+      //   } else {
+      //     allImage.push(fileList[i]);
+      //   }
+      // }
+      // console.log(allImage.length, "onmoveddddddddd");
+      // setImage([...allImage]);
     });
   }
 
