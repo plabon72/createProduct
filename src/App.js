@@ -17,17 +17,16 @@ function App() {
   let canvRef = useRef(null);
   let contextRef = useRef(null);
   let [getImage, setImage] = useState([]);
+  let [delImage, setDelImage] = useState([]);
   let [getText, setText] = useState([]);
   let [getColor, setColor] = useState("#fff");
-
+  var data=[];
   let [status, setStatus] = useState(true);
   var canvas;
   //clear canvas each time new object added
   const clearCanvas = () => {
     let pp = document.getElementsByTagName("canvas");
-    console.log("remove-canvas", pp.length);
     for (let i = 1; i < pp.length; i++) {
-      console.log(pp[i], "", i);
       pp[i].remove();
     }
   };
@@ -62,16 +61,36 @@ function App() {
       canvas.renderAll();
     }
   }, [getImage.length]);
+ 
+
+
+
+
+  function takingSateValue(data){
+  const allvalue=  getImage.filter(item=>item.id !=data)
+  setImage([...allvalue])
+  }
 
   //uploading image saved in state
-  function imageUpload(e) {
+  async function imageUpload(e) {
     var reader = new FileReader();
     reader.onload = async function (event) {
       var imgObj = await new Image();
       imgObj.src = await event.target.result;
+      // await delImages();
+      //console.log("babuuuuuuuuu",all.length)
+      let id = Date.now();
+      let src = "image_" + id;
       setImage([
         ...getImage,
-        { imageSrc: imgObj.src, left: 80, top: 80, height: 50, width: 50 },
+        {
+          imageSrc: imgObj.src,
+          left: 80,
+          top: 80,
+          height: 50,
+          width: 50,
+          id: src,
+        },
       ]);
     };
     let p = e.target.files[0];
@@ -81,10 +100,15 @@ function App() {
 
   //handleImoji saved in state
 
-  const handleImoji = (happy) => {
-    setImage([
+  const handleImoji = async (happy) => {
+    let id = Date.now();
+    let src = "image_" + id;
+
+    //  let all=  await delImages();
+    //  console.log("babuuuuuuuuu");
+    await setImage([
       ...getImage,
-      { imageSrc: happy, left: 80, top: 80, height: 50, width: 50 },
+      { imageSrc: happy, left: 80, top: 80, height: 50, width: 50, id: src },
     ]);
   };
 
@@ -143,17 +167,17 @@ function App() {
       mtr: true,
     };
     for (let i = 0; i < getImage.length; i++) {
-      console.log("testttttttttttttttttt", getImage[i].imageSrc);
+      //console.log("testttttttttttttttttt", getImage[i].imageSrc);
       fabric.Image.fromURL(getImage[i].imageSrc, function (img) {
-       
         img.scaleToHeight(getImage[i].height);
         img.scaleToWidth(getImage[i].width);
         img.setControlsVisibility(HideControls);
-        methodsOf(img);//setting event on  each images
+        methodsOf(img); //setting event on  each images
         canvas.add(
           img.set({
             top: getImage[i].top,
             left: getImage[i].left,
+            id: getImage[i].id,
           })
         );
       });
@@ -180,8 +204,9 @@ function App() {
     image.style.border = "1px solid red";
     document.querySelector(".App").appendChild(image);
   }
+  //delete image
 
-  //images method 
+  //images method
   function methodsOf(circle) {
     circle.on("mousedown", function (e) {
       addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
@@ -191,11 +216,11 @@ function App() {
   //delete btn created and placed on objects
   function addDeleteBtn(x, y) {
     console.log(x, y, "unexpecteddd");
-    $(".deleteBtn").remove();
+    $(".plabon").remove();
     var btnLeft = x - 10;
-    var btnTop = y - 10;
+    var btnTop = y - 9;
     var deleteBtn =
-      `<img src=${delet} class="deleteBtn" style="position:absolute;top:` +
+      `<img src=${delet} class="plabon" style="position:absolute;top:` +
       btnTop +
       "px;left:" +
       btnLeft +
@@ -203,23 +228,24 @@ function App() {
     $(".canvas-container").append(deleteBtn);
   }
 
-
-  //adding handler to delete btn
-  $(document).on("click", ".deleteBtn", function () {
-    console.log(contextRef.current, "ssssssssssssssssssss oprs");
-
-    // if (canvas.getActiveObject()) {
-    //   canvas.remove(canvas.getActiveObject());
-    //   $(".deleteBtn").remove();
-    // }
-  });
-
   //here cnavas event is written
   function go(canvas) {
-  
+    //adding handler to delete btn
+    $(document).on("click", ".plabon", async function () {
+      if (canvas.getActiveObject()) {
+        let seletedObj = canvas.getActiveObject();
+        console.log(seletedObj.id,"selectedobj Id")
+        takingSateValue(seletedObj.id)
+       // data.push({id:seletedObj.id})
+       // setdelImage([...data]);
+        canvas.remove(canvas.getActiveObject());
+
+        $(".plabon").remove();
+      }
+    });
     canvas.on("mouse:down", function (e) {
       if (!canvas.getActiveObject()) {
-        $(".deleteBtn").remove();
+        $(".plabon").remove();
       }
     });
 
@@ -228,13 +254,13 @@ function App() {
     });
 
     canvas.on("object:scaling", function (e) {
-      $(".deleteBtn").remove();
+      $(".plabon").remove();
     });
     canvas.on("object:moving", function (e) {
-      $(".deleteBtn").remove();
+      $(".plabon").remove();
     });
     canvas.on("object:rotating", function (e) {
-      $(".deleteBtn").remove();
+      $(".plabon").remove();
     });
 
     //setting the height and width of objects while resize and saved
@@ -244,21 +270,22 @@ function App() {
       let w = p * obj.target.width;
       let h = r * obj.target.height;
 
+      console.log(obj, "scaledddddd   gggggggggggg");
+      let cuId = obj.target.id;
       let getImages = getImage;
       setImage([]);
-      console.log(getImages.length, "shittttttttttttttt");
       if (obj.target.hasOwnProperty("_element")) {
-        let actualsource = obj.target._element.currentSrc.slice(
-          obj.target._element.baseURI.length
-        );
+        // let actualsource = obj.target._element.currentSrc.slice(
+        //   obj.target._element.baseURI.length
+        // );
         let content = [];
         for (let i = 0; i < getImages.length; i++) {
-          let str = getImages[i].imageSrc;
+          let str = getImages[i].id;
 
-          if (str.indexOf(actualsource) !== -1) {
+          if (str.indexOf(cuId) !== -1) {
             getImages[i].height = h;
             getImages[i].width = w;
-
+            getImages[i].id = getImages[i].id;
             content.push(getImages[i]);
           } else {
             content.push(getImages[i]);
@@ -270,16 +297,20 @@ function App() {
       }
     });
 
-
     //while moving object in canvas redering all
     canvas.on("object:moved", function () {
-      let obj = canvas.getActiveObject();
-      let canvasJson = JSON.stringify(canvas);
-      canvasJson = JSON.parse(canvasJson);
+      // let obj = canvas.getActiveObject();
+      // let canvasJson = JSON.stringify(canvas);
+      // canvasJson = JSON.parse(canvasJson);
 
-      console.log(canvasJson);
+      //  console.log(canvasJson, "bbbbbbbbbbbbbbbbbbbbb");
+
+      let canvasJson = JSON.stringify(canvas.toDatalessJSON(["id"]));
+      console.log(JSON.parse(canvasJson));
+      canvasJson = JSON.parse(canvasJson);
       let images = getImage;
       setImage([]);
+
       const textList = canvasJson.objects.filter(
         (item) => item.type === "text"
       );
@@ -313,6 +344,7 @@ function App() {
           left: fileList[i].left,
           height: images[i].height,
           width: images[i].width,
+          id: images[i].id,
         };
         allImage.push(copyFile);
       }
