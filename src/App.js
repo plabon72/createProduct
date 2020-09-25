@@ -13,15 +13,14 @@ import delet from "./images/delete.png";
 import { fabric } from "fabric";
 import $ from "jquery";
 
+
 function App() {
   let canvRef = useRef(null);
   let contextRef = useRef(null);
   let [getImage, setImage] = useState([]);
 
-
   let [getColor, setColor] = useState("#fff");
 
-  
   var canvas;
   //clear canvas each time new object added
   const clearCanvas = () => {
@@ -44,9 +43,9 @@ function App() {
 
       // setStatus(true);
 
-      const fileList = getImage.filter((item) => item.fieldType == "image");
+      const fileList = getImage.filter((item) => item.fieldType === "image");
       drawImage(canvas, fileList);
-      const textList = getImage.filter((item) => item.fieldType == "text");
+      const textList = getImage.filter((item) => item.fieldType === "text");
       if (textList.length > 0) {
         for (let i = 0; i < textList.length; i++) {
           canvas.add(
@@ -67,7 +66,9 @@ function App() {
   function takingSateValue(data, getImages) {
     console.log(getImages, "brooooooooooooooo");
 
-    let st = getImages.length;
+    let st = getImages.length || 0;
+    if(st==0)
+     return
     console.log(st.length, "ttttttttttrrrrrrrrrrrrr");
 
     console.log(getImages);
@@ -198,7 +199,8 @@ function App() {
   //delete btn created and placed on objects
   function addDeleteBtn(x, y) {
     console.log(x, y, "unexpecteddd");
-    $(".plabon").remove();
+   
+    
     var btnLeft = x - 10;
     var btnTop = y - 10;
     var deleteBtn =
@@ -231,10 +233,9 @@ function App() {
     });
 
     canvas.on("mouse:dblclick", function (e) {
-        if (canvas.getActiveObject()) {
-      addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
-          
-        }
+      if (canvas.getActiveObject()) {
+        addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
+      }
     });
 
     canvas.on("object:scaling", function (e) {
@@ -257,9 +258,8 @@ function App() {
       console.log(obj, "scaledddddd   gggggggggggg");
       let cuId = obj.target.id;
       let getImages = getImage;
-      setImage([]);
+      
       if (obj.target.hasOwnProperty("_element")) {
-       
         let content = [];
         for (let i = 0; i < getImages.length; i++) {
           let str = getImages[i].id;
@@ -269,7 +269,8 @@ function App() {
             getImages[i].width = w;
             getImages[i].id = getImages[i].id;
             getImages[i].fieldType = "image";
-
+            getImages[i].top= obj.target.top;
+            getImages[i].left = obj.target.left;
             content.push(getImages[i]);
           } else {
             content.push(getImages[i]);
@@ -297,7 +298,6 @@ function App() {
         let str = getImages[i].id;
 
         if (str.indexOf(cuId) !== -1) {
-       
           if (field === "image") {
             copyFile = {
               imageSrc: getImages[i].imageSrc,
@@ -326,16 +326,12 @@ function App() {
 
       console.log(content);
       setImage([...content]);
-
     });
-
-
-
-
   }
 
   return (
     <div className="App">
+      
       <div
         className="image"
         style={{ border: "2px solid black", padding: "10px", width: "400px" }}
@@ -369,7 +365,6 @@ function App() {
           style={{ height: "50px", width: "50px" }}
         />
       </div>
-
       <div id="tshirt-div" style={{ margin: "10px" }}>
         <img id="tshirt-backgroundpicture" src={image1} />
 
@@ -387,7 +382,6 @@ function App() {
           </div>
         </div>
       </div>
-
       <div style={{ margin: "10px" }}>
         <label>T-Shirt Color:</label>
         <select id="tshirt-color" onChange={(e) => mycolor(e)}>
@@ -398,7 +392,6 @@ function App() {
           <option value="#ff0">Yellow</option>
         </select>
       </div>
-
       <div style={{ margin: "10px" }}>
         <label>Upload image</label>
         <input
@@ -408,12 +401,10 @@ function App() {
           onChange={(e) => imageUpload(e)}
         />
       </div>
-
       <div style={{ margin: "10px" }}>
         <input type="text" id="text" placeholder="type your text" />
         <button onClick={handleText}> Submit Text</button>
       </div>
-
       <div style={{ margin: "10px" }}>
         <button type="button" onClick={display}>
           Display
