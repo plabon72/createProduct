@@ -203,13 +203,22 @@ function App() {
     
     var btnLeft = x - 10;
     var btnTop = y - 10;
-    var deleteBtn =
-      `<img src=${delet} class="plabon" style="position:absolute;top:` +
-      btnTop +
-      "px;left:" +
-      btnLeft +
-      'px;cursor:pointer;width:20px;height:20px;"/>';
-    $(".canvas-container").append(deleteBtn);
+    let deletebtn = document.createElement("img");
+    deletebtn.src = `${delet}`;
+    deletebtn.className="plabon";
+    deletebtn.style.cssText=`position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px`;
+    
+    
+    // var deleteBtn =
+    //   `<img src=${delet} class="plabon" style="position:absolute;top:` +
+    //   btnTop +
+    //   "px;left:" +
+    //   btnLeft +
+    //   'px;cursor:pointer;width:20px;height:20px;"/>';
+      let g=document.getElementsByClassName("canvas-container");
+      g[0].appendChild(deletebtn);
+     
+   // $(".canvas-container").append(deletebtn);
   }
 
   //here cnavas event is written
@@ -234,7 +243,8 @@ function App() {
 
     canvas.on("mouse:dblclick", function (e) {
       if (canvas.getActiveObject()) {
-        addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
+        if (e.target.hasOwnProperty("oCoords") && e.target.oCoords.hasOwnProperty("tr") && e.target.oCoords.tr.hasOwnProperty("x") && e.target.oCoords.tr.hasOwnProperty("y"))
+          addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
       }
     });
 
