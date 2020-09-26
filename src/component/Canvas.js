@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import "./canvas.css";
-import image1 from "../assets/background_tshirt.png"
+
 import image2 from "../assets/gallery1.png";
 import happy from "../assets/smile.png";
 import grin from "../assets/grinning.png";
@@ -12,9 +12,10 @@ import yummy from "../assets/yummy.png";
 import delet from "../assets/delete.png";
 import { fabric } from "fabric";
 
-function Canvas() {
+function Canvas({ image1 }) {
   let canvRef = useRef(null);
   let contextRef = useRef(null);
+  let btnRef = useRef(null);
   let [getImage, setImage] = useState([]);
 
   let [getColor, setColor] = useState("#fff");
@@ -62,18 +63,16 @@ function Canvas() {
   }, [getImage.length]);
 
   function takingSateValue(data, getImages) {
-    console.log(getImages, "brooooooooooooooo");
+    console.log(getImages,data, "brooooooooooooooo");
 
-    let st = getImages.length || 0;
+    let st = data || 0;
     if (st == 0) return;
     console.log(st, "ttttttttttrrrrrrrrrrrrr");
 
     console.log(getImages);
     console.log(data);
     const allvalue = getImages.filter((item) => item.id != data);
-    console.log(allvalue);
-
-    //clearCanvas();
+    
     setImage([...allvalue]);
   }
 
@@ -86,6 +85,7 @@ function Canvas() {
 
       let id = Date.now();
       let src = "image_" + id;
+      
       setImage([
         ...getImage,
         {
@@ -99,8 +99,8 @@ function Canvas() {
         },
       ]);
     };
+    console.log(e.target.files);
     let p = e.target.files[0];
-
     reader.readAsDataURL(p);
   }
 
@@ -203,7 +203,10 @@ function Canvas() {
     deletebtn.src = `${delet}`;
     deletebtn.className = "plabon";
     deletebtn.style.cssText = `position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px`;
+    btnRef.current = deletebtn;
+
     let g = document.getElementsByClassName("canvas-container");
+
     g[0].appendChild(deletebtn);
     deletebtn.addEventListener("click", myTest);
   }
@@ -214,12 +217,12 @@ function Canvas() {
       let gg = getImage;
       let seletedObj = contextRef.current.getActiveObject();
       takingSateValue(seletedObj.id, gg);
-
       let nodes = document.getElementsByClassName("plabon");
-      for (let i = 0; i < nodes.length; i++) {
-        nodes[i].remove();
-      }
+
+      console.log(btnRef.current);
+
       canvas.remove(canvas.getActiveObject());
+      btnRef.current.remove();
     }
   }
 
@@ -348,6 +351,10 @@ function Canvas() {
     });
   }
 
+  const clearAll=()=>{  
+    
+   
+  }
   return (
     <div className="App">
       <div
@@ -428,6 +435,13 @@ function Canvas() {
           Display
         </button>
       </div>
+
+      <div style={{ margin: "10px" }}>
+        <button type="button" onClick={clearAll}>
+          clear All
+        </button>
+      </div>
+
     </div>
   );
 }
