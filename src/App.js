@@ -11,7 +11,7 @@ import smiling1 from "./images/smiling-1.png";
 import yummy from "./images/yummy.png";
 import delet from "./images/delete.png";
 import { fabric } from "fabric";
-import $ from "jquery";
+import Canvas from "./component/Canvas";
 
 
 function App() {
@@ -67,8 +67,7 @@ function App() {
     console.log(getImages, "brooooooooooooooo");
 
     let st = getImages.length || 0;
-    if(st==0)
-     return
+    if (st == 0) return;
     console.log(st, "ttttttttttrrrrrrrrrrrrr");
 
     console.log(getImages);
@@ -199,86 +198,71 @@ function App() {
   //delete btn created and placed on objects
   function addDeleteBtn(x, y) {
     console.log(x, y, "unexpecteddd");
-   
-    
+
     var btnLeft = x - 10;
     var btnTop = y - 10;
     let deletebtn = document.createElement("img");
     deletebtn.src = `${delet}`;
-    deletebtn.className="plabon";
-    deletebtn.style.cssText=`position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px`;
-    
-    
-    // var deleteBtn =
-    //   `<img src=${delet} class="plabon" style="position:absolute;top:` +
-    //   btnTop +
-    //   "px;left:" +
-    //   btnLeft +
-    //   'px;cursor:pointer;width:20px;height:20px;"/>';
-    
-      let g=document.getElementsByClassName("canvas-container");
-      g[0].appendChild(deletebtn);
-     
-
-      deletebtn.addEventListener("click", myTest);
-
-   // $(".canvas-container").append(deletebtn);
+    deletebtn.className = "plabon";
+    deletebtn.style.cssText = `position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px`;
+    let g = document.getElementsByClassName("canvas-container");
+    g[0].appendChild(deletebtn);
+    deletebtn.addEventListener("click", myTest);
   }
 
+  function myTest() {
+    console.log("VVVVVVVVVVVVVVVVVVVVVVV", canvas, contextRef.current);
+    if (contextRef.current.getActiveObject()) {
+      let gg = getImage;
+      let seletedObj = contextRef.current.getActiveObject();
+      takingSateValue(seletedObj.id, gg);
+      canvas.remove(canvas.getActiveObject());
 
-
-     function myTest() {
-       console.log("VVVVVVVVVVVVVVVVVVVVVVV",canvas, contextRef.current);
-       if (contextRef.current.getActiveObject()) {
-         let gg = getImage;
-         let seletedObj = contextRef.current.getActiveObject();
-         takingSateValue(seletedObj.id, gg);
-         canvas.remove(canvas.getActiveObject());
-
-         document.getElementsByClassName("plabon")[0].remove();
-       }
-     }
+      let nodes = document.getElementsByClassName("plabon");
+      for (let i = 0; i < nodes.length; i++) {
+        nodes[i].remove();
+      }
+    }
+  }
 
   //here cnavas event is written
   function go(canvas) {
-    //adding handler to delete btn
-    
-    // $(document).on("click", ".plabon", async function () {
-    //   console.log($(document),"ppppppppppppppppppp")
-    //   console.log(document.getElementsByClassName("plabon"))
-    //   if (canvas.getActiveObject()) {
-    //     let gg = getImage;
-    //     let seletedObj = canvas.getActiveObject();
-    //     takingSateValue(seletedObj.id, gg);
-    //     canvas.remove(canvas.getActiveObject());
-
-    //     $(".plabon").remove();
-    //   }
-    // });
-
-
-
     canvas.on("mouse:down", function (e) {
       if (!canvas.getActiveObject()) {
-        $(".plabon").remove();
+       document.getElementsByClassName("plabon")[0].remove();
       }
     });
 
     canvas.on("mouse:dblclick", function (e) {
       if (canvas.getActiveObject()) {
-        if (e.target.hasOwnProperty("oCoords") && e.target.oCoords.hasOwnProperty("tr") && e.target.oCoords.tr.hasOwnProperty("x") && e.target.oCoords.tr.hasOwnProperty("y"))
+        if (
+          e.target.hasOwnProperty("oCoords") &&
+          e.target.oCoords.hasOwnProperty("tr") &&
+          e.target.oCoords.tr.hasOwnProperty("x") &&
+          e.target.oCoords.tr.hasOwnProperty("y")
+        )
           addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
       }
     });
 
     canvas.on("object:scaling", function (e) {
-      $(".plabon").remove();
+      let nodes = document.getElementsByClassName("plabon");
+      for (let i = 0; i < nodes.length; i++) {
+        nodes[i].remove();
+      }
     });
     canvas.on("object:moving", function (e) {
-      $(".plabon").remove();
+    //  $(".plabon").remove();
+      let nodes=document.getElementsByClassName("plabon");
+      for(let i=0;i<nodes.length;i++){
+        nodes[i].remove();
+      }
     });
     canvas.on("object:rotating", function (e) {
-      $(".plabon").remove();
+      let nodes = document.getElementsByClassName("plabon");
+      for (let i = 0; i < nodes.length; i++) {
+        nodes[i].remove();
+      }
     });
 
     //setting the height and width of objects while resize and saved
@@ -291,7 +275,7 @@ function App() {
       console.log(obj, "scaledddddd   gggggggggggg");
       let cuId = obj.target.id;
       let getImages = getImage;
-      
+
       if (obj.target.hasOwnProperty("_element")) {
         let content = [];
         for (let i = 0; i < getImages.length; i++) {
@@ -302,7 +286,7 @@ function App() {
             getImages[i].width = w;
             getImages[i].id = getImages[i].id;
             getImages[i].fieldType = "image";
-            getImages[i].top= obj.target.top;
+            getImages[i].top = obj.target.top;
             getImages[i].left = obj.target.left;
             content.push(getImages[i]);
           } else {
@@ -364,7 +348,8 @@ function App() {
 
   return (
     <div className="App">
-      
+
+
       <div
         className="image"
         style={{ border: "2px solid black", padding: "10px", width: "400px" }}
