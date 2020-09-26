@@ -394,7 +394,15 @@ function Canvas() {
 
       console.log(obj, "scaledddddd   gggggggggggg");
       let cuId = obj.target.id;
-      let getImages = getImage;
+      
+
+      let getImages = [];
+
+      if (getState === "front") {
+        getImages = getImage;
+      } else {
+        getImages = backImage;
+      }
 
       if (obj.target.hasOwnProperty("_element")) {
         console.log("bossssssssssssssssss");
@@ -416,7 +424,10 @@ function Canvas() {
         }
 
         console.log(content);
-        setImage([...content]);
+         getState === "front"
+           ? setImage([...content])
+           : setbackImage([...content]);
+
       }
     });
 
