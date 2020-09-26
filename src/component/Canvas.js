@@ -104,7 +104,7 @@ function Canvas() {
    
     clearCanvas(); //clear canvas
     let allcontents=[];
-    alert(getState);
+    
    if(getState==="front"){
      allcontents=getImage;
    }
@@ -425,7 +425,15 @@ function Canvas() {
       console.log(obj.target.id);
       let id = obj.target.id;
       let field = obj.target.fieldType;
-      let getImages = getImage;
+
+      let getImages = [];
+
+      if (getState === "front") {
+        getImages = getImage;
+      } else {
+        getImages = backImage;
+      }
+      alert(getImages.length)
 
       let cuId = obj.target.id;
 
@@ -462,8 +470,8 @@ function Canvas() {
         }
       }
 
-      console.log(content);
-      setImage([...content]);
+      getState === "front" ? setImage([...content]) : setbackImage([...content]);
+      ;
     });
   }
 
