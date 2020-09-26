@@ -10,9 +10,10 @@ import smiling from "../assets/smiling.png";
 import smiling1 from "../assets/smiling-1.png";
 import yummy from "../assets/yummy.png";
 import delet from "../assets/delete.png";
+import image1 from "../assets/background_tshirt.png";
 import { fabric } from "fabric";
 
-function Canvas({ image1 }) {
+function Canvas({text,image}) {
   let canvRef = useRef(null);
   let contextRef = useRef(null);
   let btnRef = useRef(null);
@@ -32,7 +33,7 @@ function Canvas({ image1 }) {
   //on adding image from dropdown this image this section works
   useEffect(() => {
     clearCanvas(); //clear canvas
-
+  
     if (getImage.length > 0) {
       canvas = new fabric.Canvas("test");
       contextRef.current = canvas;
@@ -60,8 +61,10 @@ function Canvas({ image1 }) {
       go(canvas);
       canvas.renderAll();
     }
-  }, [getImage.length]);
+  }, [getImage]);
 
+
+  
   function takingSateValue(data, getImages) {
     console.log(getImages,data, "brooooooooooooooo");
 
@@ -211,7 +214,8 @@ function Canvas({ image1 }) {
     deletebtn.addEventListener("click", myTest);
   }
 
-  function myTest() {
+  function myTest(e) {
+    e.preventDefault();
     console.log("VVVVVVVVVVVVVVVVVVVVVVV", canvas, contextRef.current);
     if (contextRef.current.getActiveObject()) {
       let gg = getImage;
@@ -239,6 +243,7 @@ function Canvas({ image1 }) {
 
     canvas.on("mouse:dblclick", function (e) {
       if (canvas.getActiveObject()) {
+        console.log(e.target.oCoords)
         if (
           e.target.hasOwnProperty("oCoords") &&
           e.target.oCoords.hasOwnProperty("tr") &&
@@ -351,9 +356,15 @@ function Canvas({ image1 }) {
     });
   }
 
-  const clearAll=()=>{  
-    
+  const clearAll=(e)=>{  
+    e.preventDefault()
    
+   setImage([])
+    canvas = new fabric.Canvas("test");
+    contextRef.current = canvas;
+
+    canvas.setHeight(400);
+    canvas.setWidth(200);
   }
   return (
     <div className="App">
@@ -391,7 +402,7 @@ function Canvas({ image1 }) {
         />
       </div>
       <div id="tshirt-div" style={{ margin: "10px" }}>
-        <img id="tshirt-backgroundpicture" src={image1} />
+        <img id="tshirt-backgroundpicture" src={image} />
 
         <div id="drawingArea" className="drawing-area">
           <div className="canvas-container">
@@ -407,6 +418,10 @@ function Canvas({ image1 }) {
           </div>
         </div>
       </div>
+        <div>
+          <button  >front</button>
+          <button >Back</button>
+        </div>
       <div style={{ margin: "10px" }}>
         <label>T-Shirt Color:</label>
         <select id="tshirt-color" onChange={(e) => mycolor(e)}>
