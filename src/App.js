@@ -69,7 +69,7 @@ function App() {
     let st = getImages.length || 0;
     if(st==0)
      return
-    console.log(st.length, "ttttttttttrrrrrrrrrrrrr");
+    console.log(st, "ttttttttttrrrrrrrrrrrrr");
 
     console.log(getImages);
     console.log(data);
@@ -215,25 +215,48 @@ function App() {
     //   "px;left:" +
     //   btnLeft +
     //   'px;cursor:pointer;width:20px;height:20px;"/>';
+    
       let g=document.getElementsByClassName("canvas-container");
       g[0].appendChild(deletebtn);
      
+
+      deletebtn.addEventListener("click", myTest);
+
    // $(".canvas-container").append(deletebtn);
   }
+
+
+
+     function myTest() {
+       console.log("VVVVVVVVVVVVVVVVVVVVVVV",canvas, contextRef.current);
+       if (contextRef.current.getActiveObject()) {
+         let gg = getImage;
+         let seletedObj = contextRef.current.getActiveObject();
+         takingSateValue(seletedObj.id, gg);
+         canvas.remove(canvas.getActiveObject());
+
+         document.getElementsByClassName("plabon")[0].remove();
+       }
+     }
 
   //here cnavas event is written
   function go(canvas) {
     //adding handler to delete btn
-    $(document).on("click", ".plabon", async function () {
-      if (canvas.getActiveObject()) {
-        let gg = getImage;
-        let seletedObj = canvas.getActiveObject();
-        takingSateValue(seletedObj.id, gg);
-        canvas.remove(canvas.getActiveObject());
+    
+    // $(document).on("click", ".plabon", async function () {
+    //   console.log($(document),"ppppppppppppppppppp")
+    //   console.log(document.getElementsByClassName("plabon"))
+    //   if (canvas.getActiveObject()) {
+    //     let gg = getImage;
+    //     let seletedObj = canvas.getActiveObject();
+    //     takingSateValue(seletedObj.id, gg);
+    //     canvas.remove(canvas.getActiveObject());
 
-        $(".plabon").remove();
-      }
-    });
+    //     $(".plabon").remove();
+    //   }
+    // });
+
+
 
     canvas.on("mouse:down", function (e) {
       if (!canvas.getActiveObject()) {
