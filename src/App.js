@@ -10,12 +10,13 @@ function App() {
  }
   return (
     <div className="App">
-      {get === "front" ? (
+      {/* {get === "front" ? (
         <Canvas text="textt" image={image1} />
       ) : (
         <Canvas text="back---" image={imageback} />
-      )}
-      <button onClick={handle}>change</button>
+      )} */}
+      
+      <Canvas />
     </div>
   );
 }

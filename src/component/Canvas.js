@@ -13,12 +13,13 @@ import delet from "../assets/delete.png";
 import image1 from "../assets/background_tshirt.png";
 import { fabric } from "fabric";
 
-function Canvas({text,image}) {
+function Canvas() {
   let canvRef = useRef(null);
   let contextRef = useRef(null);
   let btnRef = useRef(null);
   let [getImage, setImage] = useState([]);
-
+  let [backImage, setbackImage] = useState([]);
+  const [getState, setState] = useState("front");
   let [getColor, setColor] = useState("#fff");
 
   var canvas;
@@ -32,8 +33,9 @@ function Canvas({text,image}) {
 
   //on adding image from dropdown this image this section works
   useEffect(() => {
+    if (getState === "back") return;
     clearCanvas(); //clear canvas
-  
+
     if (getImage.length > 0) {
       canvas = new fabric.Canvas("test");
       contextRef.current = canvas;
@@ -63,10 +65,87 @@ function Canvas({text,image}) {
     }
   }, [getImage]);
 
+  //on adding image from dropdown this image this section works
+  useEffect(() => {
+    if (getState === "front") return;
+    clearCanvas(); //clear canvas
 
-  
+    if (backImage.length > 0) {
+      canvas = new fabric.Canvas("test");
+      contextRef.current = canvas;
+
+      canvas.setHeight(400);
+      canvas.setWidth(200);
+
+      // setStatus(true);
+
+      const fileList = backImage.filter((item) => item.fieldType === "image");
+      drawImage(canvas, fileList);
+      const textList = backImage.filter((item) => item.fieldType === "text");
+      if (textList.length > 0) {
+        for (let i = 0; i < textList.length; i++) {
+          canvas.add(
+            new fabric.Text(textList[i].value, {
+              left: textList[i].left,
+              top: textList[i].top,
+              id: textList[i].id,
+            })
+          );
+        }
+      }
+
+      go(canvas);
+      canvas.renderAll();
+    }
+  }, [backImage]);
+
+  //on adding image from dropdown this image this section works
+  useEffect(() => {
+   
+    clearCanvas(); //clear canvas
+    let allcontents=[];
+    alert(getState);
+   if(getState==="front"){
+     allcontents=getImage;
+   }
+   else{
+     allcontents=backImage
+   }
+       
+         canvas = new fabric.Canvas("test");
+         contextRef.current = canvas;
+
+         canvas.setHeight(400);
+         canvas.setWidth(200);
+
+         // setStatus(true);
+
+         const fileList = allcontents.filter(
+           (item) => item.fieldType === "image"
+         );
+         drawImage(canvas, fileList);
+         const textList = allcontents.filter(
+           (item) => item.fieldType === "text"
+         );
+         if (textList.length > 0) {
+           for (let i = 0; i < textList.length; i++) {
+             canvas.add(
+               new fabric.Text(textList[i].value, {
+                 left: textList[i].left,
+                 top: textList[i].top,
+                 id: textList[i].id,
+               })
+             );
+           }
+         }
+
+         go(canvas);
+         canvas.renderAll();
+      
+  }, [getState]);
+
   function takingSateValue(data, getImages) {
-    console.log(getImages,data, "brooooooooooooooo");
+    console.log(getImages, data, "brooooooooooooooo");
 
     let st = data || 0;
     if (st == 0) return;
@@ -75,7 +154,7 @@ function Canvas({text,image}) {
     console.log(getImages);
     console.log(data);
     const allvalue = getImages.filter((item) => item.id != data);
-    
+
     setImage([...allvalue]);
   }
 
@@ -88,19 +167,32 @@ function Canvas({text,image}) {
 
       let id = Date.now();
       let src = "image_" + id;
-      
-      setImage([
-        ...getImage,
-        {
-          imageSrc: imgObj.src,
-          left: 80,
-          top: 80,
-          height: 50,
-          width: 50,
-          id: src,
-          fieldType: "image",
-        },
-      ]);
+
+      getState === "front"
+        ? setImage([
+            ...getImage,
+            {
+              imageSrc: imgObj.src,
+              left: 80,
+              top: 80,
+              height: 50,
+              width: 50,
+              id: src,
+              fieldType: "image",
+            },
+          ])
+        : setbackImage([
+            ...backImage,
+            {
+              imageSrc: imgObj.src,
+              left: 80,
+              top: 80,
+              height: 50,
+              width: 50,
+              id: src,
+              fieldType: "image",
+            },
+          ]);
     };
     console.log(e.target.files);
     let p = e.target.files[0];
@@ -115,18 +207,31 @@ function Canvas({text,image}) {
 
     //  let all=  await delImages();
     //  console.log("babuuuuuuuuu");
-    setImage([
-      ...getImage,
-      {
-        imageSrc: happy,
-        left: 80,
-        top: 80,
-        height: 50,
-        width: 50,
-        id: src,
-        fieldType: "image",
-      },
-    ]);
+    getState === "front"
+      ? setImage([
+          ...getImage,
+          {
+            imageSrc: happy,
+            left: 80,
+            top: 80,
+            height: 50,
+            width: 50,
+            id: src,
+            fieldType: "image",
+          },
+        ])
+      : setbackImage([
+          ...backImage,
+          {
+            imageSrc: happy,
+            left: 80,
+            top: 80,
+            height: 50,
+            width: 50,
+            id: src,
+            fieldType: "image",
+          },
+        ]);
   };
 
   //text is saved for state
@@ -136,10 +241,16 @@ function Canvas({text,image}) {
     console.log(value, "PPPPPPPPPPPP");
     let id = Date.now();
     let src = "text_" + id;
-    setImage([
-      ...getImage,
-      { value, left: 50, top: 50, id: src, fieldType: "text" },
-    ]);
+
+    getState === "front"
+      ? setImage([
+          ...getImage,
+          { value, left: 50, top: 50, id: src, fieldType: "text" },
+        ])
+      : setbackImage([
+          ...backImage,
+          { value, left: 50, top: 50, id: src, fieldType: "text" },
+        ]);
   };
 
   // draw image based on saved value
@@ -243,9 +354,9 @@ function Canvas({text,image}) {
 
     canvas.on("mouse:dblclick", function (e) {
       if (canvas.getActiveObject()) {
-        console.log(e.target.oCoords)
         if (
           e.target.hasOwnProperty("oCoords") &&
+          e.target.oCoords !== null &&
           e.target.oCoords.hasOwnProperty("tr") &&
           e.target.oCoords.tr.hasOwnProperty("x") &&
           e.target.oCoords.tr.hasOwnProperty("y")
@@ -356,16 +467,20 @@ function Canvas({text,image}) {
     });
   }
 
-  const clearAll=(e)=>{  
-    e.preventDefault()
-   
-   setImage([])
+  const clearAll = (e) => {
+    e.preventDefault();
+
+    setImage([]);
     canvas = new fabric.Canvas("test");
     contextRef.current = canvas;
 
     canvas.setHeight(400);
     canvas.setWidth(200);
-  }
+  };
+
+  const handle = () => {
+    getState === "front" ? setState("back") : setState("front");
+  };
   return (
     <div className="App">
       <div
@@ -402,7 +517,11 @@ function Canvas({text,image}) {
         />
       </div>
       <div id="tshirt-div" style={{ margin: "10px" }}>
-        <img id="tshirt-backgroundpicture" src={image} />
+        {getState === "front" ? (
+          <img id="tshirt-backgroundpicture" src={image1} />
+        ) : (
+          <img id="tshirt-backgroundpicture" src={smiling} />
+        )}
 
         <div id="drawingArea" className="drawing-area">
           <div className="canvas-container">
@@ -418,10 +537,10 @@ function Canvas({text,image}) {
           </div>
         </div>
       </div>
-        <div>
-          <button  >front</button>
-          <button >Back</button>
-        </div>
+      <div>
+        <button>front</button>
+        <button>Back</button>
+      </div>
       <div style={{ margin: "10px" }}>
         <label>T-Shirt Color:</label>
         <select id="tshirt-color" onChange={(e) => mycolor(e)}>
@@ -456,7 +575,9 @@ function Canvas({text,image}) {
           clear All
         </button>
       </div>
-
+      <div>
+        <button onClick={handle}>change</button>
+      </div>
     </div>
   );
 }
